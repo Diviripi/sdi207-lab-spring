@@ -1,5 +1,7 @@
 package com.uniovi.entities;
+
 import javax.persistence.*;
+
 @Entity
 public class Mark {
 	@Id
@@ -8,17 +10,26 @@ public class Mark {
 	private String description;
 	private Double score;
 
-	
-	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	public Mark(Long id, String description, Double score) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.score = score;
 	}
-	
+
+	public Mark(String description, Double score, User user) {
+		super();
+		this.description = description;
+		this.score = score;
+		this.user = user;
+	}
+
 	public Mark() {
-		
+
 	}
 
 	public Long getId() {
@@ -49,5 +60,13 @@ public class Mark {
 	public String toString() {
 		return "Mark [id=" + id + ", description=" + description + ", score=" + score + "]";
 	}
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }
