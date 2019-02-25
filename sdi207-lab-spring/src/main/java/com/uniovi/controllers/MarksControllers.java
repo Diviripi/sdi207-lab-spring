@@ -21,7 +21,7 @@ import com.uniovi.services.UsersService;
 public class MarksControllers {
 	@Autowired
 	private HttpSession httpSession;
-	
+
 	@Autowired // Inyetar el servicio
 	private MarksService marksService;
 
@@ -30,7 +30,7 @@ public class MarksControllers {
 
 	@RequestMapping("/mark/list")
 	public String getList(Model model) {
-		
+
 		model.addAttribute("markList", marksService.getMarks());
 		return "mark/list";
 	}
@@ -81,6 +81,18 @@ public class MarksControllers {
 	public String updateList(Model model) {
 		model.addAttribute("markList", marksService.getMarks());
 		return "mark/list :: tableMarks";
+	}
+
+	@RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
+	public String setResendTrue(Model model, @PathVariable Long id) {
+		marksService.setMarkResend(true, id);
+		return "redirect:/mark/list";
+	}
+
+	@RequestMapping(value = "/mark/{id}/noresend", method = RequestMethod.GET)
+	public String setResendFalse(Model model, @PathVariable Long id) {
+		marksService.setMarkResend(false, id);
+		return "redirect:/mark/list";
 	}
 
 }
