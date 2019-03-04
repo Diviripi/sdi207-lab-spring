@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.uniovi.entities.Mark;
 import com.uniovi.entities.User;
 import com.uniovi.services.MarksService;
+import com.uniovi.services.RolesService;
 import com.uniovi.services.UsersService;
 
 @Controller
 public class MarksControllers {
 	@Autowired
 	private HttpSession httpSession;
+
+	@Autowired
+	private RolesService rolesService;
 
 	@Autowired // Inyetar el servicio
 	private MarksService marksService;
@@ -37,13 +41,17 @@ public class MarksControllers {
 	public String getList(Model model, Pageable pageable, Principal principal,
 			@RequestParam(value = "", required = false) String searchText) {
 		String dni = principal.getName(); // DNI es el name de la autenticación
+		
 		User user = usersService.getUserByDni(dni);
+		
 		Page<Mark> marks = new PageImpl<Mark>(new LinkedList<Mark>());
 		if (searchText != null && !searchText.isEmpty()) {
 			marks = marksService.searchMarksByDescriptionAndNameForUser(pageable, searchText, user);
 		} else {
 			marks = marksService.getMarksForUser(pageable, user);
 		}
+
+		
 		model.addAttribute("markList", marks.getContent());
 		model.addAttribute("page", marks);
 		return "mark/list";

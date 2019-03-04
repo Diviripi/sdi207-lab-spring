@@ -1,5 +1,6 @@
 package com.uniovi.services;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -69,9 +70,11 @@ public class MarksService {
 		if (user.getRole().equals("ROLE_STUDENT")) {
 			marks = marksRepository.findAllByUser(pageable, user);
 		}
-		if (user.getRole().equals("ROLE_PROFESSOR")) {
+		if (user.getRole().equals("ROLE_PROFESSOR")|| user.getRole().equals("ROLE_ADMIN")) {
+			
 			marks = getMarks(pageable);
 		}
+	
 		return marks;
 	}
 
